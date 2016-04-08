@@ -105,22 +105,22 @@ int main(int argc, char const *argv[])
         {
         	for(col=0;col<9;col++)
         	{
-        		grid[row][col]=a[i];
-                i++;
-            }
-	    }
+                   grid[row][col]=a[i];
+                   i++;
+                }
+	}
 	    printf("\n");
 
         if(solvesudoku(grid)==true)
 	    {
-		    for(row=0;row<9;row++)
-		    {
-			    for(col=0;col<9;col++)
-			    {
-	               printf("%d",grid[row][col]);
-			    }
+	        for(row=0;row<9;row++)
+		{
+                   for(col=0;col<9;col++)
+                   {
+	             printf("%d",grid[row][col]);
+	           }
 			//printf("\n");
-		    }
+	        }
 	    }
         testcase--;
 		if(testcase==0)
