@@ -1,83 +1,56 @@
-#include<stdio.h>
+#include <stdio.h>
 #define U 0
 #define N 9
-
-bool findunassignedlocation(int grid[N][N], int &row , int &col);
 bool issafe(int grid[N][N], int row,int col,int value); 
 
-bool solvesudoku(int grid[N][N])
+bool solvesudoku(int grid[N][N],int row,int col)
 {
-   int row,col,value;
+   int value;
+   if(row<9&&col<9)
+    {
+        if(grid[row][col]) 
+        {
+            if((col+1)<9) return solvesudoku(grid, row, col+1);
+            else if((row+1)<9) return solvesudoku(grid, row+1, 0);
+            else return true;
+        }    
+     
+       else
+        {
+		   for(value=1;value<=N;value++)  //for finding all the cases from 1 to 9 
+		   {
+		   	  if (issafe(grid,row,col,value))
+		   	  {
+		   	  	grid[row][col]=value;
 
-   if(!findunassignedlocation(grid,row,col))// for finding an unassigned location in grid
-   return true;
- 
-   for(value=1;value<=N;value++)  //for finding all the cases from 1 to 9 
-   {
-   	  if (issafe(grid,row,col,value))
-   	  {
-   	  	grid[row][col]=value;
-
-   	  	if(solvesudoku(grid)) //recursive call
-   	  		return true;
-
-   	  	grid[row][col]=U;
-   	  }
-   }
-   return false;
-}
-
-bool findunassignedlocation(int grid[N][N], int &row, int &col)
-{
-	for(row=0;row<N;row++)
-	{
-		for(col=0;col<N;col++)
-		{
-			if(grid[row][col]==U)
-				return true;
+		   	  	if(solvesudoku(grid,row,col)) //recursive call
+		   	  		return true;
+		        else   
+		   	     grid[row][col]=0;
+		   	  }
+		   }
+		   return false;
 		}
-	}
-	return false;
-}
-
-bool usedinrow(int grid[N][N],int row, int value)
-{
-	int col;
-	for(col=0;col<N;col++)
-	{
-			if(grid[row][col]==value)
-			return true;
-	}
-	return false;
-}
-bool usedincolumn(int grid[N][N],int col,int value)
-{
-	int row;
-	for(row=0;row<N;row++)
-	{
-		if(grid[row][col]==value)
-			return true;
-	}
-	return false;
-}
-bool usedinbox(int grid[N][N],int boxstartrow, int boxstartcol,int value)
-{
-	int row,col;
-	for(row=0;row<3;row++)
-	{
-		for(col=0;col<3;col++)
-		{
-			if(grid[row+boxstartrow][col+boxstartcol]==value)
-				return true;
-		}
-	}
-	return false;
+    }
+   else
+   	return true;
 }
 bool issafe(int grid[N][N],int row,int col,int value)
 {
-	return !usedinrow(grid,row,value)&&!usedincolumn(grid,col,value)&&!usedinbox(grid,(row-row%3),(col-col%3),value);
-}
+   	   int rowstart=row-row%3;
+       int colstart=col-col%3;
 
+       for(int i=0;i<9;i++)
+       {
+       	  if(grid[row][i]==value) 
+            return false;
+          if(grid[i][col]==value)
+          	return false;
+          if(grid[rowstart+(i%3)][colstart+i/3]==value)
+          	return false;
+       }
+       return true;
+}
 int main(int argc, char const *argv[])
 {
     int testcase;
@@ -105,22 +78,22 @@ int main(int argc, char const *argv[])
         {
         	for(col=0;col<9;col++)
         	{
-                   grid[row][col]=a[i];
-                   i++;
+        		grid[row][col]=a[i];
+                        i++;
                 }
 	}
 	    printf("\n");
 
-        if(solvesudoku(grid)==true)
+        if(solvesudoku(grid,0,0)==true)
 	    {
-	        for(row=0;row<9;row++)
-		{
-                   for(col=0;col<9;col++)
-                   {
-	             printf("%d",grid[row][col]);
-	           }
+		    for(row=0;row<9;row++)
+		    {
+			    for(col=0;col<9;col++)
+			    {
+	               printf("%d",grid[row][col]);
+			    }
 			//printf("\n");
-	        }
+		    }
 	    }
         testcase--;
 		if(testcase==0)
