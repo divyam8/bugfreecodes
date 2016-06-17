@@ -1,4 +1,6 @@
 /*given an array of n numbers give algo for checking whether there are any duplicates in the array of not
+  Time complexity:o(n)
+  Space cokmplexity:o(1)
 */
 #include<iostream>
 #include<stdlib.h>
